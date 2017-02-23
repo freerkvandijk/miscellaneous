@@ -32,7 +32,12 @@ usage() and exit(1) unless $GQ;
 
 ####Open input VCF file
 print "Analyzing file: $inputFile\n";
-open(VCF, "<$inputFile") or die("Unable to open input file"); #Read file
+if ($inputFile =~ /.gz$/) { #Check if input VCF file is in (b)gzip format
+    open(VCF, "gunzip -c $inputFile |") || die ("Can not open pipe to $inputFile"); #Read file
+}else {
+    open(VCF, "<$inputFile") or die("Unable to open input file $inputFile\n"); #Read file
+}
+
 
 ####Open output VCF file
 open(OUTPUT, ">$outputFile") or die("Unable to open output file");
